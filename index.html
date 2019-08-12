@@ -7,14 +7,26 @@
     <title>Canvas Workshop</title>
     <style>
         * {padding: 0; margin: 0; }
-        canvas { background: #eee; display: block; margin: 0 auto; }
+        canvas { background:black; display: block; margin: 0 auto; }
     </style>
     <script src="dist/bundle.js"></script>
 </head>
-<body>
-    <canvas id="myCanvas" width="800" height="520"></canvas>
+<body style="background-color: aliceblue;">
+    <div style="text-align: center; margin-top: 50px;">
+        <h1 style="font-size: 40px; font-family: Verdana, Geneva, Tahoma, sans-serif">Brick Breaker Special Edition</h1>
+    </div>
+    <div style="text-align: center; margin-top: 50px;">
+    <h1 class="title" style="text-align: center; font-family: Arial, Helvetica, sans-serif; margin-bottom: 50px">First Select A Difficulty</h1>
+    <select name="Select Diffuclty" id="selector" style="margin-bottom: 50px; display:inline-block">
+        <option value="0">Easy</option>
+        <option vale="1">Hard</option>
+    </select>
+    </div>
+    <br>
+    <h2 class="title" style="text-align: center; font-family: Arial, Helvetica, sans-serif">Then Click on the Game Board to start</h2>
+    <canvas id="myCanvas" width="800" height="520" ></canvas>
+    <div style="margin-top: 200px"></div>
 </body>
-
 <!-- <script>
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
