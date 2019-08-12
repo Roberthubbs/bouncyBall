@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let brickWidth = 140;
     let brickHeight = 40;
     let brickPadding = 10;
-    let brickOffsetTop = 30;
+    let brickOffsetTop = 50;
     let brickOffsetLeft = 30;
     let bricks = [];
     let score = 0;
@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
             colPol.push({
                 x: 0,
                 y: 0,
-                alpha: 1,
-                shrink: randColor(0.005, 0.02),
+                opacity: 1,
+                squareDec: randColor(0.005, 0.02),
                 size: randColor(5, 20),
                 speed: randColor(1, 4),
                 vel: {
@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
             p.vel.y = randColor(-1, 1);
             p.speed = randColor(1, 4);
             p.size = randColor(5, 20);
-            p.alpha = 1;
-            p.shrink = randColor(0.004, 0.01);
+            p.opacity = 0.8;
+            p.squareDec = randColor(0.004, 0.01);
             arr.push(p);
         }
     };
@@ -83,12 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
         arr.forEach(p => {
             p.x += p.vel.x * p.speed;
             p.y += p.vel.y * p.speed;
-            p.alpha -= p.shrink;
+            p.opacity -= p.squareDec;
 
             if (p.x + p.size >= canvas.width || p.x < 0) p.vel.x *= -1;
             if (p.y + p.size >= canvas.height || p.y < 0) p.vel.y *= -1;
 
-            if (p.alpha <= 0) {
+            if (p.opacity <= 0) {
                 const index = arr.indexOf(p);
                 colPol.push(p);
                 arr.splice(index, 1);
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
    function drawLives(){
        ctx.font = '16px Helvetica';
        ctx.fillStyle = "red";
-       ctx.fillText("Lives: " + lives, canvas.width-65, 20);
+       ctx.fillText("Balls Remaining: " + lives, 8, 40);
    };
     function drawBricks(){
         for (let i = 0; i < brickColumnCount; i++) {
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
        };
        arr.forEach(p => {
            ctx.fillStyle = p.color;
-           ctx.globalAlpha = p.alpha;
+           ctx.globalAlpha = p.opacity;
         //    debugger;
             // console.log(x);
             // console.log(p.x)
