@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext("2d");
     let x = canvas.width/2;
     let y = canvas.height - 30;
-    const colors = ["red", "orange", "blue", "green", "brown", "yellow", "teal"];
+    const colors = ["red", "orange", "blue", "green"];//, "brown", "yellow", "teal"];
     const randColor = (min, max) => Math.random() * (max-min) + min;
     const colPol = [];
     const arr = [];
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 x: 0,
                 y: 0,
                 alpha: 1,
-                shrink: randColor(0.004, 0.01),
+                shrink: randColor(0.005, 0.02),
                 size: randColor(5, 20),
                 speed: randColor(1, 4),
                 vel: {
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 bricks[i][j].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = "green";
+                ctx.fillStyle = colors[Math.round(Math.random() * colors.length)];
                 ctx.fill();
                 ctx.closePath();
                 }

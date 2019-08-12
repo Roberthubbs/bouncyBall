@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Canvas Workshop</title>
+    <title>Break Bricks</title>
     <style>
         * {padding: 0; margin: 0; }
-        canvas { background:black; display: block; margin: 0 auto; }
+        canvas { background:black; display: block; }
     </style>
     <script src="dist/bundle.js"></script>
 </head>
@@ -17,14 +17,26 @@
     </div>
     <div style="text-align: center; margin-top: 50px;">
     <h1 class="title" style="text-align: center; font-family: Arial, Helvetica, sans-serif; margin-bottom: 50px">First Select A Difficulty</h1>
-    <select name="Select Diffuclty" id="selector" style="margin-bottom: 50px; display:inline-block">
+    <select name="Select Diffuclty" id="selector" style="margin-bottom: 50px; display:inline-block; width: 200px; height: 40px; font-size: 20px">
         <option value="0">Easy</option>
         <option vale="1">Hard</option>
     </select>
     </div>
     <br>
-    <h2 class="title" style="text-align: center; font-family: Arial, Helvetica, sans-serif">Then Click on the Game Board to start</h2>
-    <canvas id="myCanvas" width="800" height="520" ></canvas>
+
+    <h2 class="title" style="text-align: center; font-family: Arial, Helvetica, sans-serif">Then click in between the flames to start</h2>
+        <div style="display:table; margin-left:auto; margin-right:auto; margin-bottom: 100px; border: 1px solid black; padding: 8px; border-radius: 4px;">
+            <p style="text-align: center; margin-bottom: 8px; font-family: Arial, Helvetica, sans-serif">Control the paddle with:</p>
+            <img src="public/leftAndRight.png" alt="leftRight" style="width: 200px; display:block; margin:auto; margin-bottom: 12px">
+            <p style="font-family: Arial, Helvetica, sans-serif">But be careful, the ball becomes obscured with every movement</p>
+        </div>
+       <div style="background-image: url('/Users/roberthubert/Desktop/jsGame/public/background-space-image.jpg'); height: 1000px;">
+        <div style="display: flex; justify-content: center;" >
+            <img src="public/fireGif.gif" alt="fire" style="margin-top: 200px; margin-right:0;">
+            <canvas id="myCanvas" width="800" height="520" style="margin-top: 200px"></canvas>
+            <img src="public/fireGif.gif" alt="fire" style="margin-top: 200px; margin-left:0">
+        </div>
+        </div>
     <div style="margin-top: 200px"></div>
 </body>
 <!-- <script>
