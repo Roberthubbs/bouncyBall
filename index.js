@@ -6,6 +6,8 @@ let ship = new Image();
 ship.src = 'public/saucerNew.png';
 let planet = new Image();
 planet.src = 'public/planet.png';
+let flame = new Image();
+flame.src = 'public/flame.png';
 let difficulty = 0;
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -13,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     canvas.addEventListener('click', () => { 
-       
+    
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
     let x = canvas.width/2;
@@ -222,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         bulletMoving = false;
                         rockY = canvas.height - 30;
                         if (score == brickRowCount * brickColumnCount) {
-                            // difficulty++;
+                            difficulty++;
                         drawGameOver();
 
                         }
@@ -260,7 +262,14 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.drawImage(planet, canvas.width/2-400, canvas.height-70, canvas.width, 200);
         ctx.globalAlpha = 1;
         ctx.closePath();
-    }
+    };
+    function drawFlame(){
+        ctx.beginPath();
+        
+        ctx.drawImage(flame, x, y+200, 200, 200);
+        ctx.globalAlpha = 1;
+        ctx.closePath();
+    };
     function drawBullet(){
             bullY = y;
             ctx.beginPath();
@@ -287,25 +296,34 @@ document.addEventListener('DOMContentLoaded', () => {
         drawPaddle();
        if (y + newY < ballRadius) {
            newY = -newY;
-       } else if (y + newY+240 > canvas.height-ballRadius){
+       } else if (y + newY+250 > canvas.height-ballRadius){
            if (x > paddleX && x < paddleX + paddleWidth) {
                newY = -newY;
+           
+            } 
+        }
+           if (y + newY + 65 > canvas.height - ballRadius){
+            drawFlame();
+           lives--;
+           planetOpacity -= .33;
+           if (!lives) {
+               // alert("Better luck next time");
+               // document.location.reload();
+               // drawGameOver();
+
            } else {
-                lives--;
-                planetOpacity -= .33;
-                if (!lives){
-                    // alert("Better luck next time");
-                    // document.location.reload();
-                    // drawGameOver();
-                    
-                } else {
-                    x = canvas.width / 2;
-                    y = canvas.height - 290;
-                    newX = speed;
-                    newY = -speed;
-                    paddleX = (canvas.width - paddleWidth) / 2;
-                };
+
+               x = canvas.width / 2;
+               y = canvas.height - 290;
+               newX = speed;
+               newY = -speed;
+               paddleX = (canvas.width - paddleWidth) / 2;
+
            };
+        
+           
+        
+    
        };
        if (x + newX > canvas.width-ballRadius || x + newX < ballRadius) {
            newX = -newX;
@@ -330,16 +348,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // console.log(p.x)
             
             if (difficulty === 0){
-                ctx.fillRect((p.x), (p.y+60), p.size, p.size);
-                ctx.fillRect((p.x-350), (p.y+60), p.size, p.size);
-                ctx.fillRect((p.x+350), (p.y+60), p.size, p.size);
+                ctx.fillRect((p.x), (p.y+200), p.size, p.size);
+                ctx.fillRect((p.x-350), (p.y+200), p.size, p.size);
+                ctx.fillRect((p.x+350), (p.y+200), p.size, p.size);
                 // ctx.fillRect((x), (p.y), p.size*2, p.size*2);
                 // ctx.arc((newX + p.x), (p.y + newY) - (y), p.size, 0, Math.PI * 2);
                 // ctx.fill();
             } else {
-                ctx.fillRect((p.x), (p.y + 60), p.size, p.size);
-                ctx.fillRect((p.x - 350), (p.y + 60), p.size, p.size);
-                ctx.fillRect((p.x + 350), (p.y + 60), p.size, p.size);
+                ctx.fillRect((p.x), (p.y + 200), p.size, p.size);
+                ctx.fillRect((p.x - 350), (p.y + 200), p.size, p.size);
+                ctx.fillRect((p.x + 350), (p.y + 200), p.size, p.size);
                 ctx.fillRect((canvas.width-40), (p.y), p.size/4, p.size/2);
                 ctx.fillRect((canvas.width/2), (p.y), p.size/4, p.size/2);
             }
@@ -360,13 +378,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
        
        if (!lives)  {
+           
+           
+           drawFlame();
            drawGameOver();
        }
        if (score == brickColumnCount * brickRowCount)  {
-            
+           drawFlame();
            ctx.clearRect(0, 0, canvas.width, canvas.height);
+           
            drawGameOver();
-        //    difficulty++;
+           
            lives = 3;
            speed = speed + 0.0002;
            paddleInc += .0002;
