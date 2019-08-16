@@ -9,19 +9,29 @@ planet.src = 'public/planet.png';
 let flame = new Image();
 flame.src = 'public/flame.png';
 let difficulty = 0;
+let wallE = new Image();
+wallE.src = 'public/wallE.png';
+let spaceInvader= new Image();
+let ball = new Image();
+ball.src = 'public/ball.png';
+let explosion = new Image();
+explosion.src = 'public/explosion.png';
+let isWon;
+spaceInvader.src = 'public/spaceInvader.png'
 document.addEventListener('DOMContentLoaded', () => {
     
     const canvas = document.getElementById("myCanvas");
 
-
+    const canvasTwo = document.getElementById("canvas2");
+    const ctx2 = canvasTwo.getContext("2d");
     canvas.addEventListener('click', () => { 
     
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
     let x = canvas.width/2;
     let y = canvas.height-290;
-    let rockHeight = 20;
-    let rockWidth = 17;
+    let rockHeight = 40;
+    let rockWidth = 30;
     const colors = ["red", "orange", "blue", "green"];
     const easCol = ["white"]
     const randColor = (min, max) => Math.random() * (max-min) + min;
@@ -29,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const arr = [];
     let newX = speed;
     let newY = -speed;
-    let ballRadius = 10;
-    let paddleWidth = 75;
+    let ballRadius = 20;
+    let paddleWidth = 100;
     let paddleHeight = 10;
     let paddleX = (canvas.width-paddleWidth)/2;
     let planetOpacity = 1;
@@ -41,8 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let brickRowCount;
     let savePaddle;
     let bullY;
-    let rockY = canvas.height-30;
-    let gameOver = document.getElementById('gameover')
+    let explosionX;
+    let explosionY;
+    let drawTimes = 50;
+    let rockY = canvas.height-250;
+    let gameOver = document.getElementById('gameover');
      if (difficulty === 0){
          brickRowCount = 3;
      } else if (difficulty === 1){
@@ -135,6 +148,22 @@ document.addEventListener('DOMContentLoaded', () => {
        ctx.fillStyle = "green";
        ctx.fillText("Score: " + score, 8, 20) 
    };
+   function drawWin(){
+       ctx.font = "30px Verdana";
+       // Create gradient
+       ctx.fillStyle = "red"
+       ctx.fillText("You've defeated all foes", canvas.width / 2-200, canvas.height / 2);
+
+   }
+   function drawNextLevel(){
+       
+
+       ctx.font = "30px Verdana";
+       // Create gradient
+       ctx.fillStyle = "red"
+       ctx.fillText("More Enemies On The Way", canvas.width / 2-200, canvas.height / 2);
+
+   }
    function drawLives(){
        ctx.font = '16px Helvetica';
        ctx.fillStyle = "red";
@@ -157,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 bricks[i][j].x = brickX;
                 bricks[i][j].y = brickY;
                 ctx.beginPath();
-                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.drawImage(spaceInvader, brickX, brickY, brickWidth, brickHeight);
                 ctx.fillStyle = (difficulty === 0) ? easCol[0] : "red";
                 ctx.fill();
                 ctx.closePath();
@@ -169,8 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     bricks[i][j].y = brickY;
                     bricks[i][j].val = 1
                     ctx.beginPath();
-                    ctx.rect(brickX+30, brickY+20, brickWidth/2, brickHeight/2);
-                    ctx.fillStyle = (difficulty === 0) ? easCol[0] : "red";
+                    ctx.drawImage(wallE,brickX+30, brickY, brickWidth/2, brickHeight/2+20);
+                    // ctx.fillStyle = (difficulty === 0) ? easCol[0] : "red";
                     ctx.fill();
                     ctx.closePath();
                 }
@@ -205,41 +234,57 @@ document.addEventListener('DOMContentLoaded', () => {
         
     };
     function detectCollision() {
+        // 
+        
         for (var c = 0; c < brickColumnCount; c++) {
             for (var r = 0; r < brickRowCount; r++) {
                 var b = bricks[c][r];
                 if (b.val == 1 && (c + r) !== 5) {
                     if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                        explosionY = b.y;
                         newY = -newY;
+                        explosionX = b.x;
+                        drawExplosion();
                         b.val = 0;
                         score++;
-                        if (score == brickRowCount * brickColumnCount) {
+                        if (score == brickRowCount * brickColumnCount && difficulty <= 2) {
+                            // score = 0;
                             difficulty++;
-                             drawGameOver();
+                            speed++;
+                            paddleInc++;
                             
-                        }
-                    } else if (savePaddle > b.x && savePaddle < b.x + brickWidth && rockY > b.y && rockY < b.y + brickHeight){
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            (difficulty === 3) ? drawWin() : drawNextLevel();
+
+                        } 
+                    } 
+                    if (savePaddle > b.x-20 && savePaddle < b.x + brickWidth+20 && rockY > b.y && rockY < b.y + brickHeight){
+                        
                         b.val = 0;
                         score++;
                         bulletMoving = false;
-                        rockY = canvas.height - 30;
-                        if (score == brickRowCount * brickColumnCount) {
+                        rockY = canvas.height - 250;
+                        if (score == brickRowCount * brickColumnCount && difficulty <= 2) {
+                            // score = 0;
                             difficulty++;
-                        drawGameOver();
+                            speed++;
+                            paddleInc++;
+                            
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            (difficulty === 3) ? drawWin() : drawNextLevel();
 
-                        }
+                        } 
+                    } else if (rockY < -750){
+                        rockY = canvas.height-250;
                     }
                 } else if (b.val === 1 && (c+r) === 5){
-                    if (x > b.x+30 && x < b.x+30 + brickWidth/2 && y > b.y+20 && y < b.y+20 + brickHeight/2){
+                    if (x > b.x+30 && x < b.x+30 + brickWidth/2 && y > b.y+20 && y < b.y+20 + brickHeight/2+20){
                         b.val=0;
                         score++;
-                        if (score == brickRowCount * brickColumnCount) {
-                            difficulty++;
-                            drawGameOver();
-
-                        };
+                        
                     } 
                 }
+                
             }
         }
     }
@@ -249,12 +294,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener("keyup", keyUpHandler, false);
     
     function drawBall(){
-        
+        ctx.save();
         ctx.beginPath();
-        ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-        ctx.fillStyle = "red";
-        ctx.fill();
+        ctx.drawImage(ball, x, y, ballRadius*2, ballRadius*2);
+        ctx.rotate(.25);
+        
+        
+        
         ctx.closePath();
+        ctx.restore();
     }
     function drawPlanet(){
         ctx.beginPath();
@@ -264,11 +312,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.closePath();
     };
     function drawFlame(){
-        ctx.beginPath();
+        ctx2.beginPath();
         
-        ctx.drawImage(flame, x, y+200, 200, 200);
-        ctx.globalAlpha = 1;
-        ctx.closePath();
+        ctx2.drawImage(flame, explosionX, explosionY, 100, 100);
+        ctx2.globalAlpha = 1;
+        ctx2.closePath();
+    };
+    function drawExplosion(){
+        ctx2.beginPath();
+        
+        ctx2.drawImage(explosion, explosionX, explosionY, 100, 100);
+        ctx2.globalAlpha = 1;
+        ctx2.closePath();
     };
     function drawBullet(){
             bullY = y;
@@ -285,31 +340,41 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = "orange";
         ctx.fill();
         ctx.closePath();
+    };
+    function drawTwo(){
+        if (y + 70 > canvas.height - ballRadius) {
+            explosionX = x+newX;
+            explosionY = 550;
+            
+            drawFlame();
+        }
     }
    function draw(){
-       if (lives){
+       if (lives && score != brickRowCount * brickColumnCount){
 
        ctx.clearRect(0, 0, canvas.width, canvas.height);
-       
+       ctx.save();
        drawBall();
+       ctx.rotate(.08);
+       ctx.restore();
        update();
         drawPaddle();
        if (y + newY < ballRadius) {
            newY = -newY;
-       } else if (y + newY+250 > canvas.height-ballRadius){
-           if (x > paddleX && x < paddleX + paddleWidth) {
-               newY = -newY;
+       } else if (y + newY+265 > canvas.height-ballRadius){
+           if (x > paddleX && x < paddleX + paddleWidth-3 && y  < 430) {
+                
+                newY = -newY;
            
             } 
         }
-           if (y + newY + 65 > canvas.height - ballRadius){
-            drawFlame();
+           if (y + 70 > canvas.height - ballRadius){
+            
            lives--;
            planetOpacity -= .33;
            if (!lives) {
-               // alert("Better luck next time");
-               // document.location.reload();
-               // drawGameOver();
+               
+               drawGameOver();
 
            } else {
 
@@ -320,14 +385,15 @@ document.addEventListener('DOMContentLoaded', () => {
                paddleX = (canvas.width - paddleWidth) / 2;
 
            };
-        
+            
            
         
     
        };
-       if (x + newX > canvas.width-ballRadius || x + newX < ballRadius) {
-           newX = -newX;
+       if (x + newX > canvas.width-ballRadius || x + newX< ballRadius) {
+           newX = -newX
        };
+       
        if (bulletMoving) {
            rockY-= 4;
        };
@@ -377,28 +443,42 @@ document.addEventListener('DOMContentLoaded', () => {
        drawBricks();
         }
        
-       if (!lives)  {
+       else if (lives && score == brickRowCount * brickColumnCount  && difficuty <= 2)  {
            
            
-           drawFlame();
-           drawGameOver();
+           drawNextLevel();
+
+           
        }
-       if (score == brickColumnCount * brickRowCount)  {
-           drawFlame();
-           ctx.clearRect(0, 0, canvas.width, canvas.height);
+       else if (lives && score == brickRowCount * brickColumnCount  && difficuty === 3)  {
            
-           drawGameOver();
            
-           lives = 3;
-           speed = speed + 0.0002;
-           paddleInc += .0002;
+           drawWin();
+
+           
+       }
+    //    if (score == brickRowCount * brickColumnCount && difficulty  <= 2 )  {
         
-       }
+    //        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //     //    drawFlame();
+    //        drawNextLevel();
+        
+        
+    //    } else if (score == brickRowCount * brickColumnCount && difficulty === 3){
+    //        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //     //    drawWin();
+    //    }
+       
+       drawTwo();
        drawPlanet();
        requestAnimationFrame(draw);
     };
-    colPolFiller(400)
-    draw();
+    setInterval(() => {
+        ctx2.clearRect(0, 0, canvasTwo.width, canvasTwo.height)}, 800)
+        
+        colPolFiller(400)
+        draw();
+        
 });
 
 // setInterval(() => {speed*=1.1},1000)

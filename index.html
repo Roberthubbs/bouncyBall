@@ -7,7 +7,8 @@
     <title>Break Bricks</title>
     <style>
         * {padding: 0; margin: 0; }
-        canvas { background:black; display: block; }
+        canvas { background:rgba(0,0,0,.4); display: block; }
+        
     </style>
     <script src="dist/bundle.js"></script>
 </head>
@@ -33,7 +34,8 @@
        <div style="background-image: url('public/background-space-image.jpg'); height: 1000px;">
         <div style="display: flex; justify-content: center;" >
             <img src="public/fireGif.gif" alt="fire" style="margin-top: 200px; margin-right:0;">
-            <canvas id="myCanvas" width="800" height="700" style="margin-top: 200px"></canvas>
+            <canvas id="canvas2" width="800" height="700" style="margin-top: 200px; background: black" ></canvas>
+            <canvas id="myCanvas" width="800" height="700" style="margin-top: 200px; position: absolute"></canvas>
             <img src="public/fireGif.gif" alt="fire" style="margin-top: 200px; margin-left:0">
         </div>
         </div>
