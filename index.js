@@ -161,17 +161,25 @@ document.addEventListener('DOMContentLoaded', () => {
    function drawWin(){
        ctx.font = "30px Verdana";
        // Create gradient
-       ctx.fillStyle = "red"
-       ctx.fillText("You've defeated all foes", canvas.width / 2-200, canvas.height / 2);
-
+       ctx.font = 'bold 50px Arial, sans-serif';
+       ctx.fillStyle = '#ff0000';
+       ctx.fillText('All Invaders Defeated', canvas.width / 2 - 225, canvas.height / 2);
+       ctx.strokeStyle = 'blue';
+       ctx.strokeText('All Invaders Defeated', canvas.width / 2 - 225, canvas.height / 2);
+       ctx.textBaseline = 'bottom';
+       difficulty = 0;
    }
    function drawNextLevel(){
        
 
-       ctx.font = "30px Verdana";
-       // Create gradient
-       ctx.fillStyle = "red"
-       ctx.fillText("More Enemies On The Way", canvas.width / 2-200, canvas.height / 2);
+       
+       ctx.font = 'bold 50px Arial, sans-serif';
+       ctx.fillStyle = '#ff0000';
+       ctx.fillText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
+       ctx.strokeStyle = 'blue';
+       ctx.strokeText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
+       ctx.textBaseline = 'bottom';
+       
 
    }
    function drawLives(){
@@ -180,11 +188,17 @@ document.addEventListener('DOMContentLoaded', () => {
        ctx.fillText("Balls Remaining: " + lives, 8, 40);
    };
    function drawGameOver(){
-       ctx.font = "Star Jedi";
+       ctx.font = "Star Jedi 40px";
        // Create gradient
-       ctx.fillStyle = "red"
-       ctx.fillText("Game Over Maaaaan", canvas.width/2, canvas.height/2);
-       
+    //    ctx.fillStyle = "red"
+    //    ctx.fillText("Game Over Maaaaan", canvas.width/2, canvas.height/2);
+       ctx.font = 'bold 50px Arial, sans-serif';
+       ctx.fillStyle = '#ff0000';
+       ctx.fillText('Game Over, Man', canvas.width / 2-225, canvas.height/2);
+       ctx.strokeStyle = 'blue';
+       ctx.strokeText('Game Over, Man', canvas.width / 2-225, canvas.height / 2);
+       ctx.textBaseline = 'bottom';
+       difficulty = 0;
    }
     function drawBricks(){
         for (let i = 0; i < brickColumnCount; i++) {
