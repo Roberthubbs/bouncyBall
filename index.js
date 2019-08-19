@@ -17,9 +17,10 @@ ball.src = 'public/ball.png';
 let explosion = new Image();
 explosion.src = 'public/explosion.png';
 let isWon;
-spaceInvader.src = 'public/spaceInvader.png'
+let wallBullsStarting = [];
+spaceInvader.src = 'public/spaceInvader.png';
+// import { starWars } from "http://allfont.net/allfont.css?fonts=star-jedi";
 document.addEventListener('DOMContentLoaded', () => {
-    
     const canvas = document.getElementById("myCanvas");
 
     const canvasTwo = document.getElementById("canvas2");
@@ -71,12 +72,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let brickPadding = 10;
     let brickOffsetTop = 50;
     let brickOffsetLeft = 30;
+    let brickDecrementor = 3;
+    let wallBullRad = 10;
     let bricks = [];
     let score = 0;
     let lives = 3;
     let ballMoving = false;
     let spacePress = false;
     let bulletMoving = false;
+    let wallBullOneX;
+    let wallBullOneY;
+    
+        
     const mouse = { x: x, y: y};
     for (let i = 0; i < brickColumnCount; i++){
         bricks[i] = [];
@@ -107,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+    let bossBull;
     const requestParticles = function (n = 1) {
         for (let i = 0; i < n; i++) {
             if (colPol.length <= 0) break;
@@ -143,6 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+  
+
    function drawScore(){
        ctx.font = '16px Helvetica';
        ctx.fillStyle = "green";
@@ -170,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ctx.fillText("Balls Remaining: " + lives, 8, 40);
    };
    function drawGameOver(){
-       ctx.font = "30px Verdana";
+       ctx.font = "Star Jedi";
        // Create gradient
        ctx.fillStyle = "red"
        ctx.fillText("Game Over Maaaaan", canvas.width/2, canvas.height/2);
@@ -181,8 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let j = 0; j < brickRowCount; j++) {
                 
                 if(bricks[i][j].val === 1 && (i+j) !== 5 ){
-                let brickX = (i * (brickWidth + brickPadding)) + brickOffsetLeft;
+                let brickX = (((i * (brickWidth + brickPadding) + brickOffsetLeft)));
                 let brickY = (j * (brickHeight + brickPadding)) + brickOffsetTop;
+                
                 bricks[i][j].x = brickX;
                 bricks[i][j].y = brickY;
                 ctx.beginPath();
@@ -196,7 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     let brickY = (j * (brickHeight + brickPadding)) + brickOffsetTop;
                     bricks[i][j].x = brickX;
                     bricks[i][j].y = brickY;
-                    bricks[i][j].val = 1
+                    wallBullsStarting.push([brickX+30,brickY])
+                    // startingWallBullX = brickX;
+                    // startingWallBullY = brickY+300;
+                    bricks[i][j].val = 1;
                     ctx.beginPath();
                     ctx.drawImage(wallE,brickX+30, brickY, brickWidth/2, brickHeight/2+20);
                     // ctx.fillStyle = (difficulty === 0) ? easCol[0] : "red";
@@ -205,8 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
+        
     }
-    
+    function descWallBull(){
+        if (wallBullOneY){
+            wallBullOneY+=1.5
+        }
+    }
     function keyDownHandler(e){
         if (e.key == "Right" || e.key == "ArrowRight"){
             ballMoving = true;
@@ -349,22 +368,48 @@ document.addEventListener('DOMContentLoaded', () => {
             drawFlame();
         }
     }
+        
    function draw(){
        if (lives && score != brickRowCount * brickColumnCount){
-
+        
        ctx.clearRect(0, 0, canvas.width, canvas.height);
        ctx.save();
+       
        drawBall();
+        
+      
+        
+          if (brickOffsetLeft < -40){
+              brickDecrementor = -brickDecrementor
+          }
+          if (brickOffsetLeft >100){
+              brickDecrementor = -brickDecrementor
+          }
        ctx.rotate(.08);
        ctx.restore();
        update();
         drawPaddle();
+       
+         
        if (y + newY < ballRadius) {
            newY = -newY;
        } else if (y + newY+265 > canvas.height-ballRadius){
-           if (x > paddleX && x < paddleX + paddleWidth-3 && y  < 430) {
-                
-                newY = -newY;
+           if (x > paddleX && x < paddleX + paddleWidth-18 && y  < 430) {
+               if (x < paddleX + paddleWidth / 2){
+                    newY = -newY;
+                    
+                    if (newX > 0){
+                        newX = -newX;
+                    } else {
+                        newX = newX
+                    }
+                }
+                if (x >= paddleX+paddleWidth/2){
+                    newY = -newY;
+                    if (newX < 0){
+                        newX = -newX
+                    }
+                }
            
             } 
         }
@@ -387,12 +432,14 @@ document.addEventListener('DOMContentLoaded', () => {
            };
             
            
-        
+       
+              
     
        };
        if (x + newX > canvas.width-ballRadius || x + newX< ballRadius) {
            newX = -newX
        };
+       
        
        if (bulletMoving) {
            rockY-= 4;
@@ -432,15 +479,16 @@ document.addEventListener('DOMContentLoaded', () => {
        x += newX;
        y += newY;
        
-       
        drawScore();
        drawLives();
        detectCollision();
+       
        if (bulletMoving){
         drawBullet();
         
        }
        drawBricks();
+           
         }
        
        else if (lives && score == brickRowCount * brickColumnCount  && difficuty <= 2)  {
@@ -457,6 +505,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
            
        }
+      
+       
     //    if (score == brickRowCount * brickColumnCount && difficulty  <= 2 )  {
         
     //        ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -468,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //        ctx.clearRect(0, 0, canvas.width, canvas.height);
     //     //    drawWin();
     //    }
-       
+    brickOffsetLeft += brickDecrementor;
        drawTwo();
        drawPlanet();
        requestAnimationFrame(draw);
