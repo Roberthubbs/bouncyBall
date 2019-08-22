@@ -19,6 +19,7 @@ explosion.src = 'public/explosion.png';
 let isWon;
 let wallBullsStarting = [];
 spaceInvader.src = 'public/spaceInvader.png';
+// import { drawNextLevel } from "./text_drawings.js";
 // import { starWars } from "http://allfont.net/allfont.css?fonts=star-jedi";
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById("myCanvas");
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let ballRadius = 20;
     let paddleWidth = 100;
     let paddleHeight = 10;
-    let paddleX = (canvas.width-paddleWidth)/2;
+    let paddleX = (canvas.width)/2;
     let planetOpacity = 1;
     let rightPress = false;
     let leftPress = false;
@@ -82,7 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let bulletMoving = false;
     let wallBullOneX;
     let wallBullOneY;
-    
+    let angle = Math.PI/2;
+
         
     const mouse = { x: x, y: y};
     for (let i = 0; i < brickColumnCount; i++){
@@ -132,6 +134,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+        drawNextLevel = () => {
+
+
+
+            ctx.font = 'bold 50px Arial, sans-serif';
+            ctx.fillStyle = '#ff0000';
+            ctx.fillText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
+            ctx.strokeStyle = 'blue';
+            ctx.strokeText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
+            ctx.textBaseline = 'bottom';
+        }
     const update = function () {
         if (ballMoving) if (colPol.length > 0) requestParticles(10);
 
@@ -169,19 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ctx.textBaseline = 'bottom';
        difficulty = 0;
    }
-   function drawNextLevel(){
-       
-
-       
-       ctx.font = 'bold 50px Arial, sans-serif';
-       ctx.fillStyle = '#ff0000';
-       ctx.fillText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
-       ctx.strokeStyle = 'blue';
-       ctx.strokeText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
-       ctx.textBaseline = 'bottom';
-       
-
-   }
+  
    function drawLives(){
        ctx.font = '16px Helvetica';
        ctx.fillStyle = "red";
@@ -275,7 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (b.val == 1 && (c + r) !== 5) {
                     if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
                         explosionY = b.y;
-                        newY = -newY;
+                        // newY = -newY;
+                        angle = (Math.PI*2)-angle;
                         explosionX = b.x;
                         drawExplosion();
                         b.val = 0;
@@ -329,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawBall(){
         ctx.save();
         ctx.beginPath();
-        ctx.drawImage(ball, x, y, ballRadius*2, ballRadius*2);
+        ctx.drawImage(ball, x-ballRadius, y-ballRadius, ballRadius*2, ballRadius*2);
         ctx.rotate(.25);
         
         
@@ -369,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function drawPaddle(){
         ctx.beginPath();
-        ctx.drawImage(ship, paddleX, shipHeight, paddleWidth, 50 );
+        ctx.drawImage(ship, paddleX-paddleWidth/2, shipHeight, paddleWidth, 50 );
         ctx.fillStyle = "orange";
         ctx.fill();
         ctx.closePath();
@@ -405,24 +407,23 @@ document.addEventListener('DOMContentLoaded', () => {
         drawPaddle();
        
          
-       if (y + newY < ballRadius) {
-           newY = -newY;
-       } else if (y + newY+265 > canvas.height-ballRadius){
-           if (x > paddleX && x < paddleX + paddleWidth-18 && y  < 430) {
-               if (x < paddleX + paddleWidth / 2){
-                    newY = -newY;
-                    
-                    if (newX > 0){
-                        newX = -newX;
-                    } else {
-                        newX = newX
-                    }
+       if (y < ballRadius) {
+           angle = (Math.PI*2) - angle;
+       } else if (y > shipHeight-4){
+           
+           if (x > paddleX-paddleWidth/2 && x < paddleX + paddleWidth/2 && y  < shipHeight+10) {
+               if (x < paddleX){
+                    let pct = (paddleX-x)/100
+                    console.log(pct)
+                    angle = Math.sin(x/paddleX)+Math.PI+(Math.PI/5)-pct;
+                   
                 }
-                if (x >= paddleX+paddleWidth/2){
-                    newY = -newY;
-                    if (newX < 0){
-                        newX = -newX
-                    }
+                if (x >= paddleX){
+                    let pct = (x-paddleX)/100
+                    angle = (Math.PI/2) +(Math.PI/9) + (Math.PI)+pct;
+                    // if (newX < 0){
+                    //     newX = -newX
+                    // }
                 }
            
             } 
@@ -439,9 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                x = canvas.width / 2;
                y = canvas.height - 290;
-               newX = speed;
-               newY = -speed;
-               paddleX = (canvas.width - paddleWidth) / 2;
+               
+               paddleX = (canvas.width/2)
 
            };
             
@@ -451,14 +451,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
        };
        if (x + newX > canvas.width-ballRadius || x + newX< ballRadius) {
-           newX = -newX
+           angle = Math.PI*3-angle;
        };
        
        
        if (bulletMoving) {
            rockY-= 4;
        };
-       if (rightPress && paddleX < canvas.width - paddleWidth) {
+       if (rightPress && paddleX < canvas.width) {
            paddleX += paddleInc;
            
        }
@@ -490,9 +490,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
        });
        ctx.globalAlpha = 1;
-       x += newX;
-       y += newY;
-       
+    //    x += newX;
+    //    y += newY;
+       x += Math.cos(angle)*speed;
+       y += Math.sin(angle)*speed;
+    //    console.log(x)
+    //    console.log(y)
        drawScore();
        drawLives();
        detectCollision();
