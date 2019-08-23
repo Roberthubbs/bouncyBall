@@ -24,8 +24,10 @@ spaceInvader.src = 'public/spaceInvader.png';
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById("modal");
     const btn = document.getElementById("myBtn");
+    const body = document.getElementById("body")
     btn.onclick = function () {
         modal.style.display = "none";
+        document.body.style.backgroundColor = "lightblue";
     }
     const canvas = document.getElementById("myCanvas");
 
