@@ -22,6 +22,11 @@ spaceInvader.src = 'public/spaceInvader.png';
 // import { drawNextLevel } from "./text_drawings.js";
 // import { starWars } from "http://allfont.net/allfont.css?fonts=star-jedi";
 document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById("modal");
+    const btn = document.getElementById("myBtn");
+    btn.onclick = function () {
+        modal.style.display = "none";
+    }
     const canvas = document.getElementById("myCanvas");
 
     const canvasTwo = document.getElementById("canvas2");
