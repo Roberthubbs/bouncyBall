@@ -1,26 +1,19 @@
+import { colPolFiller, update} from './color_squares';
+import { drawLives, drawGameOver, drawScore, drawWin} from './draw_words';
+import { drawPlanet, drawBall, drawFlame, drawExplosion, drawBullet, drawPaddle } from './draw_sprites';
 let speed = 4;
-let rocket = new Image();
 let paddleInc = 7;
-rocket.src = 'public/rocket.png';
-let ship = new Image();
-ship.src = 'public/saucerNew.png';
-let planet = new Image();
-planet.src = 'public/planet.png';
-let flame = new Image();
-flame.src = 'public/flame.png';
+
 let difficulty = 0;
 let wallE = new Image();
 wallE.src = 'public/wallE.png';
 let spaceInvader= new Image();
-let ball = new Image();
-ball.src = 'public/ball.png';
-let explosion = new Image();
-explosion.src = 'public/explosion.png';
+
 let isWon;
 let wallBullsStarting = [];
 spaceInvader.src = 'public/spaceInvader.png';
-// import { drawNextLevel } from "./text_drawings.js";
-// import { starWars } from "http://allfont.net/allfont.css?fonts=star-jedi";
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById("modal");
     const btn = document.getElementById("myBtn");
@@ -37,19 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
-    let x = canvas.width/2;
-    let y = canvas.height-290;
+    let x = canvas.width / 2;
+    let y = canvas.height - 290;
+        
     let rockHeight = 40;
     let rockWidth = 30;
-    const colors = ["red", "orange", "blue", "green"];
+    
     const easCol = ["white"]
-    const randColor = (min, max) => Math.random() * (max-min) + min;
-    const colPol = [];
+ 
     const arr = [];
     let newX = speed;
     let newY = -speed;
     let ballRadius = 20;
-    let paddleWidth = 100;
+    
     let paddleHeight = 10;
     let paddleX = (canvas.width)/2;
     let planetOpacity = 1;
@@ -105,43 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
    
 
 
-
-    const colPolFiller = function (n) {
-        for (let i = 0; i < n; i++) {
-            colPol.push({
-                x: 0,
-                y: 0,
-                opacity: .5,
-                squareDec: randColor(0.005, 0.02),
-                size: randColor(5, 20),
-                speed: randColor(1, 4),
-                vel: {
-                    x: 1,
-                    y: 1,
-                },
-                color: colors[Math.round(Math.random() * colors.length)]
-            });
-        }
-    }
     let bossBull;
-    const requestParticles = function (n = 1) {
-        for (let i = 0; i < n; i++) {
-            if (colPol.length <= 0) break;
+   
 
-            const p = colPol.pop();
-            p.x = mouse.x;
-            p.y = mouse.y;
-            p.vel.x = randColor(-1, 1);
-            p.vel.y = randColor(-1, 1);
-            p.speed = randColor(1, 4);
-            p.size = randColor(5, 20);
-            p.opacity = .5;
-            p.squareDec = randColor(0.004, 0.01);
-            arr.push(p);
-        }
-    };
-
-        drawNextLevel = () => {
+       const drawNextLevel = () => {
 
 
 
@@ -152,62 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.strokeText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
             ctx.textBaseline = 'bottom';
         }
-    const update = function () {
-        if (ballMoving) if (colPol.length > 0) requestParticles(10);
-
-        arr.forEach(p => {
-            p.x += p.vel.x * p.speed;
-            p.y += p.vel.y * p.speed;
-            p.opacity -= p.squareDec;
-
-            if (p.x + p.size >= canvas.width || p.x < 0) p.vel.x *= -1;
-            if (p.y + p.size >= canvas.height || p.y < 0) p.vel.y *= -1;
-
-            if (p.opacity <= 0) {
-                const index = arr.indexOf(p);
-                colPol.push(p);
-                arr.splice(index, 1);
-            }
-        });
-    };
+   
 
   
 
-   function drawScore(){
-       ctx.font = '16px Helvetica';
-       ctx.fillStyle = "green";
-       ctx.fillText("Score: " + score, 8, 20) 
-   };
-   function drawWin(){
-       ctx.font = "30px Verdana";
-       // Create gradient
-       ctx.font = 'bold 50px Arial, sans-serif';
-       ctx.fillStyle = '#ff0000';
-       ctx.fillText('All Invaders Defeated', canvas.width / 2 - 225, canvas.height / 2);
-       ctx.strokeStyle = 'blue';
-       ctx.strokeText('All Invaders Defeated', canvas.width / 2 - 225, canvas.height / 2);
-       ctx.textBaseline = 'bottom';
-       difficulty = 0;
-   }
-  
-   function drawLives(){
-       ctx.font = '16px Helvetica';
-       ctx.fillStyle = "red";
-       ctx.fillText("Balls Remaining: " + lives, 8, 40);
-   };
-   function drawGameOver(){
-       ctx.font = "Star Jedi 40px";
-       // Create gradient
-    //    ctx.fillStyle = "red"
-    //    ctx.fillText("Game Over Maaaaan", canvas.width/2, canvas.height/2);
-       ctx.font = 'bold 50px Arial, sans-serif';
-       ctx.fillStyle = '#ff0000';
-       ctx.fillText('Game Over, Man', canvas.width / 2-225, canvas.height/2);
-       ctx.strokeStyle = 'blue';
-       ctx.strokeText('Game Over, Man', canvas.width / 2-225, canvas.height / 2);
-       ctx.textBaseline = 'bottom';
-       difficulty = 0;
-   }
+
     function drawBricks(){
         for (let i = 0; i < brickColumnCount; i++) {
             for (let j = 0; j < brickRowCount; j++) {
@@ -230,12 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     bricks[i][j].x = brickX;
                     bricks[i][j].y = brickY;
                     wallBullsStarting.push([brickX+30,brickY])
-                    // startingWallBullX = brickX;
-                    // startingWallBullY = brickY+300;
+                    
                     bricks[i][j].val = 1;
                     ctx.beginPath();
                     ctx.drawImage(wallE,brickX+30, brickY, brickWidth/2, brickHeight/2+20);
-                    // ctx.fillStyle = (difficulty === 0) ? easCol[0] : "red";
                     ctx.fill();
                     ctx.closePath();
                 }
@@ -286,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // newY = -newY;
                         angle = (Math.PI*2)-angle;
                         explosionX = b.x;
-                        drawExplosion();
+                        drawExplosion(ctx2, explosionX, explosionY) ;
                         b.val = 0;
                         score++;
                         if (score == brickRowCount * brickColumnCount && difficulty <= 2) {
@@ -296,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             paddleInc++;
                             
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            (difficulty === 3) ? drawWin() : drawNextLevel();
+                            (difficulty === 3) ? drawWin(ctx, canvas, difficulty) : drawNextLevel();
 
                         } 
                     } 
@@ -313,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             paddleInc++;
                             
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            (difficulty === 3) ? drawWin() : drawNextLevel();
+                            (difficulty === 3) ? drawWin(ctx, canvas, difficulty) : drawNextLevel();
 
                         } 
                     } else if (rockY < -750){
@@ -335,60 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
     
-    function drawBall(){
-        ctx.save();
-        ctx.beginPath();
-        ctx.drawImage(ball, x-ballRadius, y-ballRadius, ballRadius*2, ballRadius*2);
-        ctx.rotate(.25);
-        
-        
-        
-        ctx.closePath();
-        ctx.restore();
-    }
-    function drawPlanet(){
-        ctx.beginPath();
-        ctx.globalAlpha = planetOpacity;
-        ctx.drawImage(planet, canvas.width/2-400, canvas.height-70, canvas.width, 200);
-        ctx.globalAlpha = 1;
-        ctx.closePath();
-    };
-    function drawFlame(){
-        ctx2.beginPath();
-        
-        ctx2.drawImage(flame, explosionX, explosionY, 100, 100);
-        ctx2.globalAlpha = 1;
-        ctx2.closePath();
-    };
-    function drawExplosion(){
-        ctx2.beginPath();
-        
-        ctx2.drawImage(explosion, explosionX, explosionY, 100, 100);
-        ctx2.globalAlpha = 1;
-        ctx2.closePath();
-    };
-    function drawBullet(){
-            bullY = y;
-            ctx.beginPath();
-            ctx.drawImage(rocket, savePaddle, rockY, rockHeight, rockWidth);
-            ctx.fillStyle = "yellow";
-            ctx.fill();
-            ctx.closePath();
-        
-    }
-    function drawPaddle(){
-        ctx.beginPath();
-        ctx.drawImage(ship, paddleX-paddleWidth/2, shipHeight, paddleWidth, 50 );
-        ctx.fillStyle = "orange";
-        ctx.fill();
-        ctx.closePath();
-    };
+    
     function drawTwo(){
         if (y + 70 > canvas.height - ballRadius) {
             explosionX = x+newX;
             explosionY = 550;
             
-            drawFlame();
+            drawFlame(ctx2, explosionX, explosionY);
         }
     }
         
@@ -398,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ctx.clearRect(0, 0, canvas.width, canvas.height);
        ctx.save();
        
-       drawBall();
+        drawBall(ctx, x, y);
         
       
         
@@ -410,15 +270,15 @@ document.addEventListener('DOMContentLoaded', () => {
           }
        ctx.rotate(.08);
        ctx.restore();
-       update();
-        drawPaddle();
+       update(canvas, ballMoving, mouse, ctx, difficulty);
+        drawPaddle(ctx, paddleX, shipHeight);
        
          
        if (y < ballRadius) {
            angle = (Math.PI*2) - angle;
        } else if (y > shipHeight-4){
            
-           if (x > paddleX-paddleWidth/2 && x < paddleX + paddleWidth/2 && y  < shipHeight+10) {
+           if (x > paddleX-100/2 && x < paddleX + 100/2 && y  < shipHeight+10) {
                if (x < paddleX){
                     let pct = (paddleX-x)/100
                     console.log(pct)
@@ -441,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
            planetOpacity -= .33;
            if (!lives) {
                
-               drawGameOver();
+            drawGameOver(ctx, canvas, difficulty);
 
            } else {
 
@@ -473,42 +333,18 @@ document.addEventListener('DOMContentLoaded', () => {
            paddleX -= paddleInc;
            
        };
-       arr.forEach(p => {
-           
-            ctx.fillStyle = p.color;
-           ctx.globalAlpha = p.opacity;
-        //    debugger;
-            // console.log(x);
-            // console.log(p.x)
-            
-            if (difficulty === 0){
-                ctx.fillRect((p.x), (p.y+200), p.size, p.size);
-                ctx.fillRect((p.x-350), (p.y+200), p.size, p.size);
-                ctx.fillRect((p.x+350), (p.y+200), p.size, p.size);
-                // ctx.fillRect((x), (p.y), p.size*2, p.size*2);
-                // ctx.arc((newX + p.x), (p.y + newY) - (y), p.size, 0, Math.PI * 2);
-                // ctx.fill();
-            } else {
-                ctx.fillRect((p.x), (p.y + 200), p.size, p.size);
-                ctx.fillRect((p.x - 350), (p.y + 200), p.size, p.size);
-                ctx.fillRect((p.x + 350), (p.y + 200), p.size, p.size);
-                ctx.fillRect((canvas.width-40), (p.y), p.size/4, p.size/2);
-                ctx.fillRect((canvas.width/2), (p.y), p.size/4, p.size/2);
-            }
-       });
+    
        ctx.globalAlpha = 1;
-    //    x += newX;
-    //    y += newY;
+  
        x += Math.cos(angle)*speed;
        y += Math.sin(angle)*speed;
-    //    console.log(x)
-    //    console.log(y)
-       drawScore();
-       drawLives();
+   
+        drawScore(ctx, score);
+        drawLives(ctx, lives);
        detectCollision();
        
        if (bulletMoving){
-        drawBullet();
+        drawBullet(ctx, bullY, y, savePaddle, rockY, rockHeight, rockWidth) ;
         
        }
        drawBricks();
@@ -525,26 +361,14 @@ document.addEventListener('DOMContentLoaded', () => {
        else if (lives && score == brickRowCount * brickColumnCount  && difficuty === 3)  {
            
            
-           drawWin();
+           drawWin(ctx, canvas, difficulty);
 
            
        }
       
-       
-    //    if (score == brickRowCount * brickColumnCount && difficulty  <= 2 )  {
-        
-    //        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     //    drawFlame();
-    //        drawNextLevel();
-        
-        
-    //    } else if (score == brickRowCount * brickColumnCount && difficulty === 3){
-    //        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     //    drawWin();
-    //    }
     brickOffsetLeft += brickDecrementor;
        drawTwo();
-       drawPlanet();
+       drawPlanet(ctx, canvas, planetOpacity);
        requestAnimationFrame(draw);
     };
     setInterval(() => {
@@ -555,5 +379,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
 });
 
-// setInterval(() => {speed*=1.1},1000)
+
+
 });
