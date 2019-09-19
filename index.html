@@ -10,28 +10,30 @@
         canvas { background:rgba(0,0,0,.4); display: block; }
         canvas > font-family{
             src:"http://allfont.net/allfont.css?fonts=star-jedi";
-            font-family: 'Star Jedi', arial; 
+            font-family: arial; 
         }
         body{
              
             font-family: 'Star Jedi', arial;
-            font-size: 48px;
-            text-shadow: 4px 4px 4px #aaa;
+            
       
         }
     </style>
        
     <script src="dist/bundle.js"></script>
 </head>
-<body id="body"style="background-color: rgba(8, 8, 8, 0.75); justify-content: center; ">
-    <h2 class="title" style="text-align: center; font-family: Arial, Helvetica, sans-serif; max-height: 90px;">Click The Canvas to save your planet</h2>
+<!-- text-align: center; font-family: Arial, Helvetica, sans-serif; max-height: 90px; -->
+ 
+<body id="body"style="background-image:  linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(24,89,102,1) 100%);">
+    <div>
+    <h2 class="title" style="text-align: center; font-weight: 900; font-size: 40px; margin-bottom: 30px; text-shadow: 2px 3px 0px #898999; color: white; line-height: 1.2; margin-top:100px;">Click The Canvas to save your planet</h2>
+    </div>
     
     
-    
-        </div>
-       <div style="background-image: url('public/background-space-image.jpg'); height: 1000px;">
-        <div style="display: flex; justify-content: center;" >
-            <div id="modal" style="display: block; width: 80%; position: fixed; z-index: 1; background-color: white">
+       
+       
+        <!-- <div style="display: flex; justify-content: center;"> -->
+            <div id="modal" style="display: block; width: 600px; position: fixed; z-index: 1; background-image: linear-gradient(to right top, #068306, #009d45, #00b876, #00d2a5, #12ebd3); left: 50%; margin-left: -300px">
                 <button id="myBtn" style="margin-left: 40px; width: 50px; height: 50px; background-color: red;">X</button>
                 <div style="text-align: center; margin-top: 5px;">
                     <h1 style="font-size: 20px; font-family: Verdana, Geneva, Tahoma, sans-serif">Brick Breaker Special Edition</h1>
@@ -63,21 +65,26 @@
                 </div>
                 
             </div>
+            
             <!-- <img src="public/fireGif.gif" alt="fire" style="margin-top: 200px; margin-right:0;"> -->
         
-        <div style="padding-right: 80px; color: red;">
-            <p style="text-align: center; margin-bottom: 8px; font-family: Arial, Helvetica, sans-serif">Control the paddle with:</p>
-            <img src="public/leftAndRight.png" alt="leftRight"
+        <div style="display: flex; justify-content: space-between">
+            <div style="max-width: 250px; text-align: center; align-self: center; padding-left: 40px;">
+                <p style="color: white; font-size: 24px; margin-bottom: 8px; font-family: Arial, Helvetica, sans-serif">Control the paddle with:</p>
+                <img src="public/leftAndRight.png" alt="leftRight"
                 style="width: 200px; display:block; margin:auto; margin-bottom: 12px">
             </div>
-            <canvas id="canvas2" width="800" height="700" style="margin-top: 200px; background: black; position: absolute" ></canvas>
-            <canvas id="myCanvas" width="800" height="700" style="margin-top: 200px; position: absolute"></canvas>
-            <div style="color: red;">
-            <p style="text-align: center; margin-bottom: 8px; font-family: Arial, Helvetica, sans-serif">And Fire Rockets With:</p>
-            <img src="public/a.png" alt="leftRight" style="width: 100px; display:block; margin:auto; margin-bottom: 12px">
+            <div style="width: 800px; height: 700px; max-height: 700; margin-left: -400">
+                <canvas id="canvas2" width="800" height="700" style="background: black; position: absolute" ></canvas>
+                <canvas id="myCanvas" width="800" height="700" style="position: absolute; "></canvas>
+            </div>
+            <div style="color: red; text-align: center; max-width: 250px; align-self: center; padding-right: 40px;">
+                <p style="color: white; font-size: 24px; margin-bottom: 8px; font-family: Arial, Helvetica, sans-serif">And Fire Rockets With:</p>
+                <img src="public/a.png" alt="leftRight" style="width: 100px; margin-bottom: 12px;">
             </div>
             <!-- <img src="public/fireGif.gif" alt="fire" style="margin-top: 200px; margin-left:0"> -->
         </div>
+        
     <div style="margin-top: 200px"></div>
    
 </body>

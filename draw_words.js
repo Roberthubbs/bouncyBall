@@ -33,3 +33,14 @@ export const drawGameOver = (ctx, canvas, difficulty) => {
     ctx.textBaseline = 'bottom';
     difficulty = 0;
 }
+export const drawNextLevel = (ctx, canvas) => {
+
+
+
+    ctx.font = 'bold 50px Arial, sans-serif';
+    ctx.fillStyle = '#ff0000';
+    ctx.fillText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
+    ctx.strokeStyle = 'blue';
+    ctx.strokeText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
+    ctx.textBaseline = 'bottom';
+}

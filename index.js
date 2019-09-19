@@ -1,7 +1,9 @@
 import { colPolFiller, update} from './color_squares';
-import { drawLives, drawGameOver, drawScore, drawWin} from './draw_words';
+import { drawLives, drawGameOver, drawScore, drawWin, drawNextLevel} from './draw_words';
 import { drawPlanet, drawBall, drawFlame, drawExplosion, drawBullet, drawPaddle } from './draw_sprites';
-let speed = 4;
+import {detectCollision} from './draw_bricks';
+export let speed = 4;
+export let score = 0;
 let paddleInc = 7;
 
 let difficulty = 0;
@@ -42,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let newX = speed;
     let newY = -speed;
     let ballRadius = 20;
-    
+    score = 0;
     let paddleHeight = 10;
     let paddleX = (canvas.width)/2;
     let planetOpacity = 1;
@@ -76,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let brickDecrementor = 3;
     let wallBullRad = 10;
     let bricks = [];
-    let score = 0;
+    
     let lives = 3;
     let ballMoving = false;
     let spacePress = false;
@@ -100,23 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let bossBull;
    
-
-       const drawNextLevel = () => {
-
-
-
-            ctx.font = 'bold 50px Arial, sans-serif';
-            ctx.fillStyle = '#ff0000';
-            ctx.fillText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
-            ctx.strokeStyle = 'blue';
-            ctx.strokeText('More Foes On the Way', canvas.width / 2 - 225, canvas.height / 2);
-            ctx.textBaseline = 'bottom';
-        }
-   
-
-  
-
-
     function drawBricks(){
         for (let i = 0; i < brickColumnCount; i++) {
             for (let j = 0; j < brickRowCount; j++) {
@@ -203,7 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             paddleInc++;
                             
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            (difficulty === 3) ? drawWin(ctx, canvas, difficulty) : drawNextLevel();
+                            // score = 0;
+                            (difficulty === 3) ? drawWin(ctx, canvas, difficulty) : drawNextLevel(ctx, canvas);
 
                         } 
                     } 
@@ -220,7 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             paddleInc++;
                             
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            (difficulty === 3) ? drawWin(ctx, canvas, difficulty) : drawNextLevel();
+                            // score = 0;
+                            (difficulty === 3) ? drawWin(ctx, canvas, difficulty) : drawNextLevel(ctx, canvas);
 
                         } 
                     } else if (rockY < -750){
@@ -236,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
             }
         }
-    }
+   }
     
     
     document.addEventListener("keydown", keyDownHandler, false);
@@ -288,9 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (x >= paddleX){
                     let pct = (x-paddleX)/100
                     angle = (Math.PI/2) +(Math.PI/9) + (Math.PI)+pct;
-                    // if (newX < 0){
-                    //     newX = -newX
-                    // }
+                    
                 }
            
             } 
@@ -335,13 +320,14 @@ document.addEventListener('DOMContentLoaded', () => {
        };
     
        ctx.globalAlpha = 1;
-  
+        detectCollision();
+    //    x, y, brickColumnCount, brickRowCount, brickWidth, brickHeight, bricks, ctx, ctx2, difficulty, rockY, savePaddle, paddleInc, explosionX, explosionY, angle, x, y, brickColumnCount, brickRowCount, brickWidth, brickHeight, bricks, ctx, ctx2, difficulty, rockY, savePaddle, paddleInc, explosionX, explosionY, angle, speed, score = detectCollision(x, y, brickColumnCount, brickRowCount, brickWidth, brickHeight, bricks, ctx, ctx2, canvas, difficulty, rockY, savePaddle , paddleInc, explosionX, explosionY, angle, speed, score);
+    //    console.log(x, y, angle)
        x += Math.cos(angle)*speed;
        y += Math.sin(angle)*speed;
    
         drawScore(ctx, score);
         drawLives(ctx, lives);
-       detectCollision();
        
        if (bulletMoving){
         drawBullet(ctx, bullY, y, savePaddle, rockY, rockHeight, rockWidth) ;
@@ -351,20 +337,20 @@ document.addEventListener('DOMContentLoaded', () => {
            
         }
        
-       else if (lives && score == brickRowCount * brickColumnCount  && difficuty <= 2)  {
+    //    else if (lives && score == brickRowCount * brickColumnCount  && difficulty <= 2)  {
            
-           
-           drawNextLevel();
+    //     //    score = 0;
+    //        drawNextLevel(ctx, canvas);
 
            
-       }
-       else if (lives && score == brickRowCount * brickColumnCount  && difficuty === 3)  {
+    //    }
+    //    else if (lives && score == brickRowCount * brickColumnCount  && difficulty === 3)  {
            
-           
-           drawWin(ctx, canvas, difficulty);
+    //     //    score = 0;
+    //        drawWin(ctx, canvas, difficulty);
 
            
-       }
+    //    }
       
     brickOffsetLeft += brickDecrementor;
        drawTwo();
@@ -377,8 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
         colPolFiller(400)
         draw();
         
-});
-
-
+    });
 
 });
